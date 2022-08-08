@@ -2,24 +2,21 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useState , useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
-import { deepOrange } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import { Button, TextField } from '@mui/material';
 const View = () => {
     const {id} = useParams();
-    console.log(id)
 
     const [data, setData] = useState([]);
     const fetchData = async () => {
-        const response = await fetch(`http://localhost:3000/get/${id}`);
+        const response = await fetch(`http://localhost:3004/get/${id}`);
         const result = await response.json();
-        setData([...result]);
+        setData([result[0]]);
     }
     useEffect(() => {
         fetchData();
     }
         , [])
-    console.log(data)
 
     return (  
         <>

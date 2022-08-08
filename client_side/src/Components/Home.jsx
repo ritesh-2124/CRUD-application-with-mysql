@@ -18,21 +18,21 @@ const [data , setData] = useState([]);
 
     const fetchData = () => {
 
-        axios.get('http://localhost:3000/get').then(res => {
+        axios.get('http://localhost:3004/get').then(res => {
            setData([...res.data]);
         }
         ).catch(err => {
-            console.log(err);
+            // console.log(err);
         }
         )
     }
     const deleteData = (id) => {
-      console.log(id);
-        axios.delete(`http://localhost:3000/delete/${id}`).then(res => {
+      // console.log(id);
+        axios.delete(`http://localhost:3004/delete/${id}`).then(res => {
             fetchData();
         }
         ).catch(err => {
-            console.log("err");
+            // console.log("err");
         }
         )
     }
@@ -43,7 +43,7 @@ const [data , setData] = useState([]);
     ,[])
 
     return (
-        <div style={{width:"50%" , margin:"auto" , marginTop:"150px" }}>
+        <div style={{width:"70%" , margin:"auto" , marginTop:"150px" }}>
         <Link style={{textDecoration:"none" , color:"white"}} to={"/add"}><Button sx={{margin:"40px"}} variant="contained"> Add Contect</Button></Link>
         <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
