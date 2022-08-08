@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useState , useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import { Box } from '@mui/system';
-import { Button, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 const View = () => {
     const {id} = useParams();
 

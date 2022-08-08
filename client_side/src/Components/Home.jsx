@@ -69,11 +69,11 @@ const [data , setData] = useState([]);
               <TableCell align="center">{row.Email}</TableCell>
               <TableCell align="center">{row.Contact}</TableCell>
               <TableCell sx={{width:"300px"}} align="center">
-          <Link to={`/view/${row.ID}`}>  <Button>view</Button></Link>
+          <Link style={{textDecoration:"none"}} to={`/view/${row.ID}`}>  <Button>view</Button></Link>
            <Button onClick={()=>{
             deleteData(row.ID)
            }}>Delate</Button>
-           <Link to={`/update/${row.ID}`}><Button>update</Button></Link> 
+           <Link style={{textDecoration:"none"}} to={`/update/${row.ID}`}><Button>update</Button></Link> 
               </TableCell>
             </TableRow>
           ))}

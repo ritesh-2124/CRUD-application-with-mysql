@@ -3,15 +3,19 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
 const sequelize = require('./db');
-
-
 app.use(cors());
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 const loginController = require("./Controller/Signup.Controller")
+const HomeController = require("./Controller/Home")
 
-app.use("/", require('./Controller/Home'));
+
+
+app.use("/", HomeController);
 app.use("/" , loginController)
+
+
+
 
 const port = process.env.PORT || 3004;
 app.listen(port, () => {

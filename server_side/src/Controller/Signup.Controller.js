@@ -5,8 +5,9 @@ require("dotenv").config()
 const Ragister = require("../Model/Login.Model")
 const Hashpassword = require('../utiles/PasswordHash');
 const comparePassword = require('../utiles/ComparePassword');
-const validateUser = require("../Middleware/userValidation");
-const emailValidate = require("../Middleware/emailValidation");
+const validateUser = require("../Middleware/userValidation")
+const { body, validationResult } = require('express-validator');
+
 
 
 const newToken = (user) => {
@@ -15,10 +16,24 @@ const newToken = (user) => {
     })
 }
 
+router.get("/user", (req, res) => {
+  Ragister.findAll().then(data => {
+    res.send(data);
+    }).catch(err => {
+        res.send(err);
+    }
+    );
+}
+);
 
-router.post("/signup", validateUser, (req, res) => {
+
+
+router.post("/signup", validateUser , body('Email').isEmail() , body("Password").isLength({min:5}), (req, res) => {
     const { Name, Email, Password } = req.body;
-    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
     Ragister.create({Name , Email ,Password:Hashpassword(Password)}).then(user => {
         res.send({
             message: "User created successfully",

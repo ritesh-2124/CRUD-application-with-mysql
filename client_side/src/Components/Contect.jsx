@@ -4,6 +4,7 @@ import { TextField } from '@mui/material'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function Contect() {
   const [data, setData] = useState({
@@ -13,6 +14,7 @@ export default function Contect() {
   });
   const [update, setUpdate] = useState('');
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +39,9 @@ export default function Contect() {
       axios.put(`http://localhost:3004/put/${id}`, data)
       .then(res => {
         setUpdate(res.data)
+        navigate('/')
+
+        
       }).catch(err => {
       }).finally(() => {
         setData({
@@ -44,11 +49,13 @@ export default function Contect() {
           Email: '',
           Contact: ''
         })
+       
       }
       )
     }
     else{
     axios.post('http://localhost:3004/post', data).then(res => {
+      navigate('/')
     }
     ).catch(err => { 
       throw err;
