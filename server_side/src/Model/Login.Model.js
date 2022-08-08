@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt');
 const sequelize = require('../db');
 
 
-const Ragister = sequelize.define('ragister', {
+
+const Ragister = sequelize.define('users', {
     ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -15,24 +16,23 @@ const Ragister = sequelize.define('ragister', {
     },
     Email: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull:false,
+        unique: true
     },
     Password: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false
     }
-},{
-    instanceMethods: {
-      generateHash: function (Password) {
-        console.log(bcrypt.hashSync(Password, bcrypt.genSaltSync(8), null))
-        return bcrypt.hashSync(Password, bcrypt.genSaltSync(8), null)
-      },
-      validPassword: function (Password) {
-        console.log(bcrypt.compareSync(Password, this.Password))
-        return bcrypt.compareSync(Password, this.Password)
-      }
-    }
-    });
+
+  });
 
 
 module.exports = Ragister;

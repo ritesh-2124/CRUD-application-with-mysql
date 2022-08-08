@@ -3,55 +3,58 @@ const router = express.Router()
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const Ragister = require("../Model/Login.Model")
+const Hashpassword = require('../utiles/PasswordHash');
+const comparePassword = require('../utiles/ComparePassword');
+const validateUser = require("../Middleware/userValidation");
+const emailValidate = require("../Middleware/emailValidation");
 
 
 const newToken = (user) => {
     return jwt.sign({ user}, process.env.TOKEN_SECRET, {
-        expiresIn: "1h"
+        expiresIn: 60*30
     })
 }
 
 
-router.post("/signup", (req, res) => {
-    Ragister.create(req.body).then(user => {
+router.post("/signup", validateUser, (req, res) => {
+    const { Name, Email, Password } = req.body;
+    
+    Ragister.create({Name , Email ,Password:Hashpassword(Password)}).then(user => {
         res.send({
+            message: "User created successfully",
             user,
             token: newToken(user)
         })
     }).catch(err => {
-        res.send(err.message)
+        res.send( err.message)
     }
     )
 })
 
 
 router.post("/login", (req, res) => {
+    const { Email, Password } = req.body;
     Ragister.findOne({
         where: {
-            email: req.body.email
+            Email
         }
     }).then(user => {
-        if (!user) {
-            return res.status(401).send({
-                message: "Wrong email or password"
-            })
-        }
-        user.validPassword(req.body.password).then(isMatch => {
-            if (!isMatch) {
-                return res.status(401).send({
-                    message: "Wrong email or password"
+        if (user) {
+            if (comparePassword(Password, user.Password)) {
+                res.send({
+                    message:"Login Success",
+                    user,
+                    token: newToken(user)
                 })
+            } else {
+                res.send("Password is incorrect")
             }
-            res.send({
-                user,
-                token: newToken(user)
-            })
-        }).catch(err => {
-            res.send(err)
+        } else {
+            res.send("User not found")
         }
-        )
-    }).catch(err => {
-        res.send(err)
+    }
+    ).catch(err => {
+        res.send(err.message)
     }
     )
 }
@@ -59,32 +62,5 @@ router.post("/login", (req, res) => {
 
 
 
-// router.post("/signin", (req, res) => {
-//     Ragister.findOne({
-//         where: {
-//             Email: req.body.Email
-//         }
-//     }).then(user => {
-//         if (!user) {
-//             res.send({
-//                 error: "User not found"
-//             })
-//         } else {
-//             if (user.Password === req.body.Password) {
-//                 res.send({
-//                     user,
-//                     token: newToken(user)
-//                 })
-//             } else {
-//                 res.send({
-//                     error: "Password is incorrect"
-//                 })
-//             }
-//         }
-//     }).catch(err => {
-//         res.send(err)
-//     }
-//     )
-// })
 
 module.exports = router

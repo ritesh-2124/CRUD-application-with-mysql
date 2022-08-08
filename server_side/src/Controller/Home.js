@@ -36,7 +36,6 @@ Router.get('/get/:id', (req, res) => {
 
 Router.post('/post', (req, res) => {
     console.log("post");
-    console.log(req.id , req.Name)
     Address.create(req.body).then(data => {
         res.send(data);
     }).catch(err => {
