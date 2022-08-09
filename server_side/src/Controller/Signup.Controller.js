@@ -17,18 +17,21 @@ const newToken = (user) => {
 }
 
 router.get("/user", (req, res) => {
-  Ragister.findAll().then(data => {
+let limit = req.query.limit || 5;
+let offset = limit * (req.query.page - 1);
+Ragister.findAndCountAll({
+    limit: limit,
+    offset: offset,
+    order: [ [ 'id', 'ASC' ]]
+}).then(data => {
     res.send(data);
-    }).catch(err => {
-        res.send(err);
-    }
-    );
-}
-);
+}).catch(err => {
+    res.send(err);
+});
+});
 
 
-
-router.post("/signup", validateUser , body('Email').isEmail() , body("Password").isLength({min:5}), (req, res) => {
+router.post("/signup", validateUser  , body('Email').isEmail() , body("Password").isLength({min:5}), (req, res) => {
     const { Name, Email, Password } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -47,7 +50,7 @@ router.post("/signup", validateUser , body('Email').isEmail() , body("Password")
 })
 
 
-router.post("/login", (req, res) => {
+router.post("/login" , (req, res) => {
     const { Email, Password } = req.body;
     Ragister.findOne({
         where: {
