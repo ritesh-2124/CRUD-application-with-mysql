@@ -14,8 +14,6 @@ import Paper from '@mui/material/Paper';
 const Home = () => {
 const [data , setData] = useState([]);
 
-
-
     const fetchData = () => {
 
         axios.get('http://localhost:3004/get').then(res => {
@@ -41,9 +39,9 @@ const [data , setData] = useState([]);
         fetchData();
     }
     ,[])
-
+     
     return (
-        <div style={{width:"70%" , margin:"auto" , marginTop:"150px" }}>
+        <div style={{width:"70%" , margin:"auto" , marginTop:"50px" }}>
         <Link style={{textDecoration:"none" , color:"white"}} to={"/add"}><Button sx={{margin:"40px"}} variant="contained"> Add Contect</Button></Link>
         <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">

@@ -39,7 +39,7 @@ export default function Contect() {
       axios.put(`http://localhost:3004/put/${id}`, data)
       .then(res => {
         setUpdate(res.data)
-        navigate('/')
+        navigate('/home')
 
         
       }).catch(err => {
@@ -55,7 +55,7 @@ export default function Contect() {
     }
     else{
     axios.post('http://localhost:3004/post', data).then(res => {
-      navigate('/')
+      navigate('/home')
     }
     ).catch(err => { 
       throw err;

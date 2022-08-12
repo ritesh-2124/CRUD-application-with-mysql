@@ -5,7 +5,7 @@ const app = express();
 const sequelize = require('./db');
 app.use(cors());
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 const loginController = require("./Controller/Signup.Controller")
 const HomeController = require("./Controller/Home")
 

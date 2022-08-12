@@ -12,7 +12,7 @@ const { body, validationResult } = require('express-validator');
 
 const newToken = (user) => {
     return jwt.sign({ user}, process.env.TOKEN_SECRET, {
-        expiresIn: 60*30
+        expiresIn: "1h"
     })
 }
 
