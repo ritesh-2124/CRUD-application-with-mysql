@@ -16,31 +16,9 @@ const newToken = (user) => {
     })
 }
 
-router.get("/user", (req, res) => {
-    console.log("Test",req.headers)
-  if(req.headers.origin == "http://localhost:3000"){
-    let limit = req.query.limit || 5;
-let offset = limit * (req.query.page - 1)||0;
-Ragister.findAndCountAll({
-    limit: limit,
-    offset: offset,
-    order: [ [ 'id', 'ASC' ]]
-}).then(data => {
-    res.send(data);
-}).catch(err => {
-    res.send(err);
-});
-
-  }else{
-    res.send("Not allowed");
-  }
-})
-
 router.post("/signup", validateUser  , body('Email').isEmail() , body("Password").isLength({min:5}), (req, res) => {
     const { Name, Email, Password } = req.body;
     const errors = validationResult(req);
-    console.log("test", req.headers)
-    if(req.headers.origin == "http://localhost:3000"){
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -54,9 +32,6 @@ router.post("/signup", validateUser  , body('Email').isEmail() , body("Password"
         res.send( err.message)
     }
     )
-}else{
-    res.send("Not allowed");
-}
 })
 
 

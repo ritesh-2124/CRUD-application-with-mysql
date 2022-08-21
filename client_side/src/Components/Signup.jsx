@@ -1,6 +1,8 @@
 import axios from 'axios'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Button, TextField, Typography } from '@mui/material'
+import { Box } from '@mui/system'
 
 export default function Signup() {
 const [user, setUser] = React.useState({
@@ -33,21 +35,22 @@ console.log(user)
 
   return (
     <>
-        <div className="form-group">
-            <label htmlFor="Name">Name</label>
-            <input type="text" className="form-control" id="Name" placeholder="Enter Name" onChange={(e) => setUser({...user, Name: e.target.value})} />
-        </div>
-        <div className="form-group">
-            <label htmlFor="Email">Email</label>
-            <input type="email" className="form-control" id="Email" placeholder="Enter Email" onChange={(e) => setUser({...user, Email: e.target.value})} />
-        </div>
-        <div className="form-group">
-            <label htmlFor="Password">Password</label>
-            <input type="password" className="form-control" id="Password" placeholder="Enter Password" onChange={(e) => setUser({...user, Password: e.target.value})} />
-        </div>
-        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
-        <Link to={"/login"}><button>login</button></Link>
-
+        <Box mt={20}>
+        <Typography>You are making a co admin</Typography>
+            <TextField variant="outlined" label="Name" type="text" id="Name"  onChange={(e) => setUser({...user, Name: e.target.value})} />
+        </Box>
+        <Box mt={2}>
+            <TextField variant="outlined" label="Email" type="email" id="Email"  onChange={(e) => setUser({...user, Email: e.target.value})} />
+        </Box>
+        <Box mt={2}>
+            <TextField variant="outlined" label="Password" type="password" id="Password"  onChange={(e) => setUser({...user, Password: e.target.value})} />
+        </Box>
+        <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+        </Box>
+        {/* <Box mt={2}>
+        <Link to={"/Signup"}  style={{textDecoration:"none"}}><Button variant="contained">Make Co-admin</Button></Link>
+        </Box> */}
     </>
   )
 }

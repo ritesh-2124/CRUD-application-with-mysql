@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import {Box , Button , TextField , Typography} from '@mui/material'
 
 
 export default function Login() {
@@ -32,15 +33,19 @@ const navigate = useNavigate();
 
   return (
     <>
-        <div className="form-group">
-            <label htmlFor="Email">Email</label>
-            <input type="email" className="form-control" id="Email" placeholder="Enter Email" onChange={(e) => setUser({...user, Email: e.target.value})} />
-        </div>
-        <div className="form-group">
-            <label htmlFor="Password">Password</label>
-            <input type="password" className="form-control" id="Password" placeholder="Enter Password" onChange={(e) => setUser({...user, Password: e.target.value})} />
-        </div>
-        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+    <Box ml={150} mt={5}>
+       <Button variant="contained" color="primary" onClick={() => navigate('/Add')}>Apply for Job</Button>
+        </Box>
+          <Box mt={20}>
+          <Typography m={5} variant='h4'>Admin Login</Typography>
+            <TextField variant="outlined" label="Email" type="email" id="Email"  onChange={(e) => setUser({...user, Email: e.target.value})} />
+        </Box>
+        <Box mt={2}>
+            <TextField variant="outlined" label="Password" type="password" id="Password"  onChange={(e) => setUser({...user, Password: e.target.value})} />
+        </Box>
+        <Box mt={2}>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+        </Box>
 
     </>
   )

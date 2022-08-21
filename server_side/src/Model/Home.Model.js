@@ -16,7 +16,12 @@ const Address = sequelize.define('addresses', {
     },
     Contact: {
         type: DataTypes.STRING
+    },
+    Profile: {
+        type: DataTypes.STRING
     }
+},{
+    timestamps: false
 }
 );
 

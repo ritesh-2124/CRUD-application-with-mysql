@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { TextField } from '@mui/material'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -10,7 +10,8 @@ export default function Contect() {
   const [data, setData] = useState({
     Name: '',
     Email: '',
-    Contact: ''
+    Contact: '',
+    Profile : ''
   });
   const [update, setUpdate] = useState('');
   const { id } = useParams();
@@ -18,8 +19,14 @@ export default function Contect() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setData({ ...data, [name]: value });
+    if(name === 'Profile'){
+      setData({ ...data, [name]: e.target.files[0] });
+    }
+    else{
+      setData({ ...data, [name]: value });
+    }
   }
+console.log(data)
 
   const fetchData = async () => {
     const response = await axios.get(`http://localhost:3004/get/${id}`);
@@ -35,6 +42,12 @@ export default function Contect() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('Name', data.Name);
+    formData.append('Email', data.Email);
+    formData.append('Contact', data.Contact);
+    formData.append('Profile', data.Profile);
+  
     if(id){
       axios.put(`http://localhost:3004/put/${id}`, data)
       .then(res => {
@@ -47,24 +60,25 @@ export default function Contect() {
         setData({
           Name: '',
           Email: '',
-          Contact: ''
+          Contact: '',
+          Profile : ''
         })
        
       }
       )
     }
     else{
-    axios.post('http://localhost:3004/post', data).then(res => {
-      navigate('/home')
+    axios.post('http://localhost:3004/post', formData).then(res => {
+      console.log(res.data)
+      alert('Data Inserted Successfully we will contact you soon')
+      navigate('/')
     }
-    ).catch(err => { 
-      throw err;
-    }
-    ).finally(() => {
+    ).catch(err => {alert("something went wrong") }).finally(() => {
       setData({
         Name: '',
         Email: '',
-        Contact: ''
+        Contact: '',
+        Profile : ''
       })
     }
     )
@@ -73,11 +87,17 @@ export default function Contect() {
 
   return (
     <>
-      <Box sx={{ width: "250px", margin: "auto", marginTop: "150px" }}>
+      <Box sx={{ width: "300px", margin: "auto", marginTop: "150px" }}>
+      <Typography variant="h4" sx={{ textAlign: "center", marginBottom: "20px"  }}>fill the form correct</Typography>
         <TextField sx={{ marginTop: "20px", width: "300px" }} id="outlined-basic" value={data.Name || ""} onChange={handleChange} label="Name" name='Name' variant="outlined" />
         <TextField sx={{ marginTop: "20px", width: "300px" }} id="outlined-basic" onChange={handleChange} label="Email" value={data.Email || ""} name='Email' variant="outlined" />
         <TextField sx={{ marginTop: "20px", width: "300px" }} id="outlined-basic" onChange={handleChange} label="Contact"  name='Contact' value={data.Contact || ""} variant="outlined" />
-        <Button sx={{ marginTop: "20px", width: "300px" }} variant="contained" onClick={ handleSubmit}>{id ? "Update" : "Add"}</Button></Box>
+        <form action="/profile" method="post" style={{margin:"50px 0" }} encType="multipart/form-data">
+        <label htmlFor="file">Upload Profile Picture</label>
+        <TextField type="file" onChange={handleChange} name="Profile" />
+</form>
+        <Button sx={{ marginTop: "20px", width: "300px" }} variant="contained" onClick={ handleSubmit}>{id ? "Update" : "Apply"}</Button>
+        </Box>
     </>
   )
 }

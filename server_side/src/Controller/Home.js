@@ -1,24 +1,24 @@
 const express = require('express');
-
 const Router = express.Router();
-const con = require('../db');
-const Sequelize = require('sequelize');
 const Address = require("../Model/Home.Model");
+const upload = require("../Middleware/imageUpload");
+
 
 
 Router.get('/get', (req, res) => {
-    console.log("get");
-    Address.findAll().then(data => {
+    let limit = req.query.limit || 5;
+    let offset = limit * (req.query.page - 1)||0;
+    Address.findAll({
+        limit: limit,
+        offset: offset
+    }).then((data) => {
         res.send(data);
-    }).catch(err => {
+    }).catch((err) => {
         res.send(err);
-    }
-    );
-}
-);
+    })
+})
 
 Router.get('/get/:id', (req, res) => {
-    console.log("get");
     Address.findAll({
         where: {
             ID: req.params.id
@@ -34,12 +34,17 @@ Router.get('/get/:id', (req, res) => {
 );
 
 
-Router.post('/post', (req, res) => {
-    console.log("post");
-    Address.create(req.body).then(data => {
+Router.post('/post', upload ,(req, res) => {
+    let datavalue = {
+        Name: req.body.Name,
+        Email: req.body.Email,
+        Contact: req.body.Contact,
+        Profile: req.file.path
+    }
+    Address.create(datavalue).then(data => {
         res.send(data);
     }).catch(err => {
-        res.send(err);
+        res.send(err.message);
     }
     );
 }
@@ -75,58 +80,5 @@ Router.delete('/delete/:id', (req, res) => {
 
 
 
-module.exports = Router;    
 
-
-
-
-
-
-// Router.get('/get',async (req, res) => {
-//     // Find all users
-// const users = await Address.findAll();
-// res.send(users);
-
-// }
-// );
-// Router.get('/get/:id', (req, res) => {
-//     const id = req.params.id;
-//     con.query('SELECT * FROM address WHERE id = ?', [id], (err, result) => {
-//         if (err) throw err;
-//         res.send(result);
-//     }
-//     )
-    
-// }
-// );
-//     Router.post('/post', (req, res) => {
-//         const post = req.body;
-//         const sql = "insert into address (Name, Email, Contact) values (?, ?, ?)";
-//         con.query(sql, [post.Name, post.Email, post.Contact], function (err, result) {
-//             if (err) throw err;
-//             res.send(result);
-//         });
-//     }
-//     );
-//     Router.put('/put/:id', (req, res) => { 
-//         const id = req.params.id;
-//         const post = req.body;
-//         const sql = "update address set Name = ?, Email = ?, Contact = ? where id = ?";
-//         con.query(sql, [post.Name, post.Email, post.Contact, id], function (err, result) {
-//             if (err) throw err;
-//             res.send(result);
-//         });
-//     }
-//     );
-//     Router.delete('/delete/:id', (req, res) => {
-//         const id = req.params.id;
-//         const sql = `delete from address where id = ${id}`;
-//         con.query(sql, id, function (err, result) {
-//             if (err) throw err;
-//             res.send(result);
-//         });
-//     }
-//     );
-
-
-    // module.exports = Router;
+module.exports =  Router    
